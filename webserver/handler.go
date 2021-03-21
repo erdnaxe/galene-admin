@@ -77,7 +77,12 @@ func updateGroup(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed to unmarshal JSON: %s", err)
 		return
 	}
-	g.Name = vars["name"]
+
+	// Check that group name is consistent
+	if g.Name != vars["name"] {
+		http.Error(w, "Group name does not match between query and JSON.", http.StatusBadRequest)
+		return
+	}
 
 	// Update
 	if err = group.Update(g); err != nil {

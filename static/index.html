@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Galène admin</title>
+</head>
+
+<body>
+    <h1>Groups</h1>
+
+    <ul id="list-groups"></ul>
+
+    <script src="js/galene-admin.js"></script>
+    <script>
+        // Update HTML list
+        function updateGroupListElement(groups) {
+            const listElement = document.getElementById('list-groups');
+            listElement.innerHTML = "";  // empty list
+
+            // Create list elements one by one
+            groups.forEach((group) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<b>${group.Name}</b>: ${JSON.stringify(group.Description)}`;
+                listElement.appendChild(li);
+            })
+        }
+
+        const groupAPI = new GroupAPI(updateGroupListElement);
+
+        // Initial loading
+        groupAPI.reloadGroups()
+    </script>
+</body>
+
+</html>
