@@ -8,10 +8,9 @@ import (
 // Directory containing groups JSON description
 var Directory string
 
-// Group description from github.com/jech/galene/group
-// fileName is changed to (Name + ".json")
-type Group struct {
-	Name           string        `json:"-"`
+// Description from github.com/jech/galene/group
+type Description struct {
+	fileName       string        `json:"-"`
 	modTime        time.Time     `json:"-"`
 	fileSize       int64         `json:"-"`
 	Description    string        `json:"description,omitempty"`
@@ -30,6 +29,12 @@ type Group struct {
 	Presenter      []interface{} `json:"presenter,omitempty"`
 	Other          []interface{} `json:"other,omitempty"`
 	Codecs         []string      `json:"codecs,omitempty"`
+}
+
+// Group contains a name and a description
+type Group struct {
+	Name        string
+	Description Description
 }
 
 // Groups contains all groups

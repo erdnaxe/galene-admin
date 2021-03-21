@@ -18,8 +18,8 @@ func main() {
 
 	// Debug
 	group.Groups = []group.Group{
-		{Name: "test", Description: "Hello"},
-		{Name: "test2", Description: "Hello 2"},
+		{Name: "test", Description: group.Description{Contact: "Hello"}},
+		{Name: "test2", Description: group.Description{Contact: "Hello 2"}},
 	}
 
 	// Start routines
