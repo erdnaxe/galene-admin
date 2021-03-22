@@ -16,12 +16,6 @@ func main() {
 		"group description `directory`")
 	flag.Parse()
 
-	// Debug
-	group.Groups = []group.Group{
-		{Name: "test", Description: group.Description{Contact: "Hello"}},
-		{Name: "test2", Description: group.Description{Contact: "Hello 2"}},
-	}
-
 	// Start routines
 	go group.WatchGroups()
 	go webserver.Serve()

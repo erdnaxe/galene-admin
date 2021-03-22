@@ -20,6 +20,10 @@
             const listElement = document.getElementById('list-groups');
             listElement.innerHTML = "";  // empty list
 
+            if (groups == null) {
+                return  // do not iterate on Null
+            }
+
             // Create list elements one by one
             groups.forEach((group) => {
                 const li = document.createElement('li');
@@ -32,6 +36,11 @@
 
         // Initial loading
         groupAPI.reloadGroups()
+
+        // Play a bit
+        groupAPI.createGroup({ "Name": "test", "Description": { "contact": "Hello" } })
+        groupAPI.updateGroup("test", { "Name": "test", "Description": { "contact": "Hello2" } })
+        groupAPI.deleteGroup("test")
     </script>
 </body>
 

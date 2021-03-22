@@ -20,11 +20,11 @@ class GroupAPI {
     }
 
     // Create a group
-    createGroup() {
+    createGroup(newGroup) {
         fetch(`/api/group`, {
             method: "POST",
             body: JSON.stringify(newGroup)
-        }).then(reloadGroups);
+        }).then(() => this.reloadGroups);
     }
 
     // Update a group
@@ -32,13 +32,13 @@ class GroupAPI {
         fetch(`/api/group/${name}`, {
             method: "PUT",
             body: JSON.stringify(newGroup)
-        }).then(reloadGroups);
+        }).then(() => this.reloadGroups);
     }
 
     // Delete a group by name
     deleteGroup(name) {
         fetch(`/api/group/${name}`, {
             method: "DELETE",
-        }).then(reloadGroups);
+        }).then(() => this.reloadGroups);
     }
 }

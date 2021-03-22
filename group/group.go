@@ -1,7 +1,12 @@
 package group
 
 import (
+	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"os"
+	"path"
+	"regexp"
 	"time"
 )
 
@@ -38,7 +43,7 @@ type Group struct {
 }
 
 // Groups contains all groups
-var Groups []Group
+var Groups []Group = make([]Group, 0)
 
 // WatchGroups updates Groups variable when JSON changes
 func WatchGroups() {
@@ -46,10 +51,34 @@ func WatchGroups() {
 }
 
 // Create new group
-func Create(g Group) error {
-	Groups = append(Groups, g)
+func Create(newGroup Group) error {
+	// Verify new group name is a slug
+	matched, err := regexp.MatchString(`^[a-z0-9_-]+$`, newGroup.Name)
+	if err != nil {
+		return err
+	}
+	if !matched {
+		return errors.New("name is not a slug")
+	}
 
-	// TODO: create JSON file
+	// Check group does not already exist
+	for _, g := range Groups {
+		if g.Name == newGroup.Name {
+			return errors.New("name already exist")
+		}
+	}
+
+	// Create and write JSON
+	content, err := json.MarshalIndent(newGroup, "", "  ")
+	if err != nil {
+		return err
+	}
+	filePath := path.Join(Directory, newGroup.Name+".json")
+	if err = ioutil.WriteFile(filePath, content, 0644); err != nil {
+		return err
+	}
+
+	Groups = append(Groups, newGroup)
 	return nil
 }
 
@@ -57,8 +86,18 @@ func Create(g Group) error {
 func Update(newGroup Group) error {
 	for i, g := range Groups {
 		if g.Name == newGroup.Name {
-			Groups[i] = g
-			// TODO: write JSON file
+
+			// Create and write JSON
+			content, err := json.MarshalIndent(newGroup, "", "  ")
+			if err != nil {
+				return err
+			}
+			filePath := path.Join(Directory, g.Name+".json")
+			if err = ioutil.WriteFile(filePath, content, 0644); err != nil {
+				return err
+			}
+
+			Groups[i] = newGroup
 			return nil
 		}
 	}
@@ -69,8 +108,13 @@ func Update(newGroup Group) error {
 func Delete(name string) error {
 	for i, g := range Groups {
 		if g.Name == name {
+			// Remove JSON
+			filePath := path.Join(Directory, g.Name+".json")
+			if err := os.Remove(filePath); err != nil {
+				return err
+			}
+
 			Groups = append(Groups[:i], Groups[i+1:]...)
-			// TODO: remove JSON file
 			return nil
 		}
 	}
