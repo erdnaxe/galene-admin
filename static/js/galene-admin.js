@@ -14,14 +14,14 @@ class GroupAPI {
 
     // Get the list of groups and call function to display it
     reloadGroups() {
-        fetch('/api/group', {
+        return fetch('/api/group', {
             method: "GET",
         }).then(r => r.json()).then(this.displayCallback);
     }
 
     // Create a group
     createGroup(newGroup) {
-        fetch(`/api/group`, {
+        return fetch(`/api/group`, {
             method: "POST",
             body: JSON.stringify(newGroup)
         }).then(() => this.reloadGroups);
@@ -29,7 +29,7 @@ class GroupAPI {
 
     // Update a group
     updateGroup(name, newGroup) {
-        fetch(`/api/group/${name}`, {
+        return fetch(`/api/group/${name}`, {
             method: "PUT",
             body: JSON.stringify(newGroup)
         }).then(() => this.reloadGroups);
@@ -37,7 +37,7 @@ class GroupAPI {
 
     // Delete a group by name
     deleteGroup(name) {
-        fetch(`/api/group/${name}`, {
+        return fetch(`/api/group/${name}`, {
             method: "DELETE",
         }).then(() => this.reloadGroups);
     }

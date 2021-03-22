@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"sync"
 	"time"
 )
 
@@ -44,6 +45,7 @@ type Group struct {
 
 // Groups contains all groups
 var Groups []Group = make([]Group, 0)
+var groupsMutex sync.Mutex
 
 // WatchGroups updates Groups variable when JSON changes
 func WatchGroups() {
@@ -62,6 +64,8 @@ func Create(newGroup Group) error {
 	}
 
 	// Check group does not already exist
+	groupsMutex.Lock()
+	defer groupsMutex.Unlock()
 	for _, g := range Groups {
 		if g.Name == newGroup.Name {
 			return errors.New("name already exist")
@@ -84,6 +88,9 @@ func Create(newGroup Group) error {
 
 // Update group
 func Update(newGroup Group) error {
+	groupsMutex.Lock()
+	defer groupsMutex.Unlock()
+
 	for i, g := range Groups {
 		if g.Name == newGroup.Name {
 
@@ -106,6 +113,9 @@ func Update(newGroup Group) error {
 
 // Delete group by name
 func Delete(name string) error {
+	groupsMutex.Lock()
+	defer groupsMutex.Unlock()
+
 	for i, g := range Groups {
 		if g.Name == name {
 			// Remove JSON
