@@ -20,25 +20,28 @@ class GroupAPI {
     }
 
     // Create a group
-    createGroup(newGroup) {
-        return fetch(`/api/group`, {
+    async createGroup(newGroup) {
+        await fetch(`/api/group`, {
             method: "POST",
             body: JSON.stringify(newGroup)
-        }).then(() => this.reloadGroups);
+        });
+        this.reloadGroups();
     }
 
     // Update a group
-    updateGroup(name, newGroup) {
-        return fetch(`/api/group/${name}`, {
+    async updateGroup(name, newGroup) {
+        await fetch(`/api/group/${name}`, {
             method: "PUT",
             body: JSON.stringify(newGroup)
-        }).then(() => this.reloadGroups);
+        });
+        this.reloadGroups();
     }
 
     // Delete a group by name
-    deleteGroup(name) {
-        return fetch(`/api/group/${name}`, {
+    async deleteGroup(name) {
+        await fetch(`/api/group/${name}`, {
             method: "DELETE",
-        }).then(() => this.reloadGroups);
+        });
+        this.reloadGroups();
     }
 }

@@ -16,9 +16,7 @@ var Directory string
 
 // Description from github.com/jech/galene/group
 type Description struct {
-	fileName       string        `json:"-"`
 	modTime        time.Time     `json:"-"`
-	fileSize       int64         `json:"-"`
 	Description    string        `json:"description,omitempty"`
 	Contact        string        `json:"contact,omitempty"`
 	Comment        string        `json:"comment,omitempty"`
@@ -47,11 +45,6 @@ type Group struct {
 var Groups []Group = make([]Group, 0)
 var groupsMutex sync.Mutex
 
-// WatchGroups updates Groups variable when JSON changes
-func WatchGroups() {
-	// TODO
-}
-
 // Create new group
 func Create(newGroup Group) error {
 	// Verify new group name is a slug
@@ -73,7 +66,7 @@ func Create(newGroup Group) error {
 	}
 
 	// Create and write JSON
-	content, err := json.MarshalIndent(newGroup, "", "  ")
+	content, err := json.MarshalIndent(newGroup.Description, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -95,7 +88,7 @@ func Update(newGroup Group) error {
 		if g.Name == newGroup.Name {
 
 			// Create and write JSON
-			content, err := json.MarshalIndent(newGroup, "", "  ")
+			content, err := json.MarshalIndent(newGroup.Description, "", "  ")
 			if err != nil {
 				return err
 			}
